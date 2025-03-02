@@ -529,7 +529,7 @@ void *arg_funcs_help_action(Arg self, void *extra) {
 void *arg_funcs_file_format_help_desc(Arg self, void *extra) {
     UNUSED(self);
     UNUSED(extra);
-    printf("Explains the accepted file formats for input lists.\n\n");
+    printf("Explains the accepted file formats for input lists\n\n");
     self.action(self, NULL);
     return NULL;
 }
@@ -537,7 +537,7 @@ void *arg_funcs_file_format_help_desc(Arg self, void *extra) {
 void *arg_funcs_file_format_help_short_desc(Arg self, void *extra) {
     UNUSED(self);
     UNUSED(extra);
-    printf("Displays information about supported input file formats.\n");
+    printf("Displays information about supported input file formats\n");
     return NULL;
 }
 

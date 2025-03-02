@@ -65,6 +65,11 @@ If you want to analyze your Instagram followers and following, you can specify t
 
 Alternatively, if you have copied the `<div>` elements containing followers or following from the web interface, you can use those as input files.
 
+To get more details about the program's usage, run:
+```sh
+./lcmp --help
+```
+
 ## License
 
 This project is licensed under the **Do What The Fuck You Want To Public License (WTFPL)**. See `LICENSE` for details.
@@ -145,8 +150,12 @@ Once you have the project downloaded and the compiler installed:
 1. Open the terminal.
 2. Use the `cd` command to move into the project directory:
    ```sh
-   cd path/to/lcmp
+   cd <path/to/lcmp>
    ```
+   
+The `cd` command stands for "change directory". It is used to navigate to different folders in your file system. When you open the terminal, you start in your home directory. To go to another folder, you type `cd` followed by the path to the folder you want to go to.
+
+For example, if your project is in a folder named "lcmp" on your desktop, you would type `cd Desktop/lcmp`.
 
 ### 6. **Compiling and Running the Program**
 
@@ -164,7 +173,7 @@ For **Clang (or other compilers)**, replace `gcc` with the name of your compiler
 <compiler> -O2 -o lcmp src/main.c src/arg.c src/buf.c src/method.c src/error.c src/slice.c
 ```
 
-This will generate an executable file called `lcmp`.
+This will generate an executable file called `lcmp`, to see how to use it, read [Usage](#usage)
 
 That's it! You've successfully downloaded, compiled, and run the project. If you encounter any issues, there are many online tutorials and videos that explain how to set up and use compilers and terminals, so don't hesitate to check them out for more help.
 
