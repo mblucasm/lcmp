@@ -73,26 +73,30 @@ size_t dict_compar_to_div(Dict *dict, const char *contents, size_t len, const ch
 Prefix prefix_from_char(const char *buffer);
 const char *prefix_to_char(Prefix prefix);
 
-void print_error(const char *msg, ...);
 bool starts_with(const char *buffer, const char *prefix);
 bool starts_withxl(const char *buffer, const char *prefix, size_t plen);
-void usage(void);
-void quit(int exit_code);
 void replace(char *buffer, const char old, const char new);
-const char *arg_extract_set_value(const char *arg);
 const char *find(const char *hay_stack, const char needle);
 const char *findr(const char *hay_stack, const char needle);
 size_t findi(const char *hay_stack, const char needle);
 size_t findri(const char *hay_stack, const char needle);
-char *file_read(const char *file_path, size_t *readed_len);
+
 void div_ensure_english(Slice contents, const char *file);
-void print_add_path_error(const char *path);
+
+void usage(void);
+void quit(int exit_code);
+void swap_buf(Buf *a, Buf *b);
+char *file_read(const char *file_path, size_t *readed_len);
+
+void args_parse(void);
 bool args_add_path(const char *path);
 size_t arg_idx(const char *other, void *extra);
-void args_parse(void);
-void swap_buf(Buf *a, Buf *b);
+const char *arg_extract_set_value(const char *arg);
+
+void print_error(const char *msg, ...);
+void print_add_path_error(const char *path);
 void print_matching_list_title(void);
-void print_matching_list_end(void);
+void print_matching_list_end(size_t count);
 
 Arg ARGS[] = {
     ARG_DEFINE(help, "--help"),
@@ -182,8 +186,7 @@ int main(int argc, char **argv) {
         case PREFIX_NONE: count = dict_compar_to_raw (dict, contents, len, PARGS.paths[1].buf, PARGS.stream_out[1]); break;
         case PREFIX_HTML: count = dict_compar_to_html(dict, contents, len, PARGS.paths[1].buf, PARGS.stream_out[1]); break;
     } free((char*)contents);
-    print_matching_list_end();
-    printf("Total mismatches = %zu\n", count);
+    print_matching_list_end(count);
 
     quit(0);
     return 0;
@@ -744,13 +747,15 @@ void print_matching_list_title(void) {
     }
 }
 
-void print_matching_list_end(void) {
+void print_matching_list_end(size_t count) {
     switch(PARGS.method) {
         case METHOD_AA: 
             printf("===================MATCHING LIST END===================\n");
+            printf("Total matches = %zu\n", count);
             break;
         default:
             printf("=================NOT MATCHING LIST END=================\n");
+            printf("Total mismatches = %zu\n", count);
             break;
     }
 }
