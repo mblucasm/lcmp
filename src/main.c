@@ -86,6 +86,13 @@ size_t findi(const char *hay_stack, const char needle);
 size_t findri(const char *hay_stack, const char needle);
 char *file_read(const char *file_path, size_t *readed_len);
 void div_ensure_english(Slice contents, const char *file);
+void print_add_path_error(const char *path);
+bool args_add_path(const char *path);
+size_t arg_idx(const char *other, void *extra);
+void args_parse(void);
+void swap_buf(Buf *a, Buf *b);
+void print_matching_list_title(void);
+void print_matching_list_end(void);
 
 Arg ARGS[] = {
     ARG_DEFINE(help, "--help"),
@@ -101,49 +108,6 @@ char **ARGV = NULL;
 Buf BUF = {0};
 Pargs PARGS = {0};
 Error ERROR = {0};
-
-void print_add_path_error(const char *path) {
-    print_error("%s: You only can specify %d files\n", PARGS.program, N);
-    fprintf(stderr, "Tried to add '%s' when ['%s'", path, PARGS.paths[0].buf);
-    for(size_t i = 1; i < N; ++i) fprintf(stderr, ", '%s'", PARGS.paths[i].buf);
-    fprintf(stderr, "] were already specified\n");
-}
-
-bool args_add_path(const char *path) {
-    for(size_t i = 0; i < N; ++i) {
-        if(!PARGS.paths[i].buf) {
-            buf_put(&PARGS.paths[i], path);
-            return true;
-        } 
-    } return false;
-}
-
-size_t arg_idx(const char *other, void *extra) {
-    for(size_t i = 0; i < ARG_COUNT; ++i) if(ARGS[i].match(ARGS[i], other, extra)) return i;
-    return ARG_COUNT;
-}
-
-void args_parse(void) {
-    while(ARGC > 0) {
-        const char *arg = arg_shift(&ARGC, &ARGV);
-        size_t idx = arg_idx(arg, NULL);
-        if(idx < ARG_COUNT) {
-            ARGS[idx].action(ARGS[idx], (void*)arg);
-        } else if(starts_with(arg, "--")) {
-            print_error("%s: Command '%s' is unknown\n", PARGS.program, arg);
-            quit(1);
-        } else if(!args_add_path(arg)) {
-            print_add_path_error(arg);
-            quit(1);
-        }
-    }
-}
-
-void swap_buf(Buf *a, Buf *b) {
-    Buf temp = *a;
-    *a = *b;
-    *b = temp;
-}
 
 int main(int argc, char **argv) {
 
@@ -212,13 +176,13 @@ int main(int argc, char **argv) {
 
     size_t count = 0;
     prefix = prefix_from_char(contents);
-    printf("===================NOT MATCHING LIST===================\n");
+    print_matching_list_title();
     switch(prefix) {
         case PREFIX_DIV:  count = dict_compar_to_div (dict, contents, len, PARGS.paths[1].buf, PARGS.stream_out[1]); break;
         case PREFIX_NONE: count = dict_compar_to_raw (dict, contents, len, PARGS.paths[1].buf, PARGS.stream_out[1]); break;
         case PREFIX_HTML: count = dict_compar_to_html(dict, contents, len, PARGS.paths[1].buf, PARGS.stream_out[1]); break;
     } free((char*)contents);
-    printf("=================NOT MATCHING LIST END=================\n");
+    print_matching_list_end();
     printf("Total mismatches = %zu\n", count);
 
     quit(0);
@@ -724,4 +688,69 @@ void *arg_funcs_file_X_out_action(Arg self, void *extra) {
     }
     buf_put(PARGS.out + target, ptr);
     return NULL;
+}
+
+void print_add_path_error(const char *path) {
+    print_error("%s: You only can specify %d files\n", PARGS.program, N);
+    fprintf(stderr, "Tried to add '%s' when ['%s'", path, PARGS.paths[0].buf);
+    for(size_t i = 1; i < N; ++i) fprintf(stderr, ", '%s'", PARGS.paths[i].buf);
+    fprintf(stderr, "] were already specified\n");
+}
+
+bool args_add_path(const char *path) {
+    for(size_t i = 0; i < N; ++i) {
+        if(!PARGS.paths[i].buf) {
+            buf_put(&PARGS.paths[i], path);
+            return true;
+        } 
+    } return false;
+}
+
+size_t arg_idx(const char *other, void *extra) {
+    for(size_t i = 0; i < ARG_COUNT; ++i) if(ARGS[i].match(ARGS[i], other, extra)) return i;
+    return ARG_COUNT;
+}
+
+void args_parse(void) {
+    while(ARGC > 0) {
+        const char *arg = arg_shift(&ARGC, &ARGV);
+        size_t idx = arg_idx(arg, NULL);
+        if(idx < ARG_COUNT) {
+            ARGS[idx].action(ARGS[idx], (void*)arg);
+        } else if(starts_with(arg, "--")) {
+            print_error("%s: Command '%s' is unknown\n", PARGS.program, arg);
+            quit(1);
+        } else if(!args_add_path(arg)) {
+            print_add_path_error(arg);
+            quit(1);
+        }
+    }
+}
+
+void swap_buf(Buf *a, Buf *b) {
+    Buf temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void print_matching_list_title(void) {
+    switch(PARGS.method) {
+        case METHOD_AA: 
+            printf("=====================MATCHING LIST=====================\n");
+            break;
+        default:
+            printf("===================NOT MATCHING LIST===================\n");
+            break;
+    }
+}
+
+void print_matching_list_end(void) {
+    switch(PARGS.method) {
+        case METHOD_AA: 
+            printf("===================MATCHING LIST END===================\n");
+            break;
+        default:
+            printf("=================NOT MATCHING LIST END=================\n");
+            break;
+    }
 }
