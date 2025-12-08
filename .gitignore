@@ -1,8 +1,12 @@
 *
 
-!.gitignore
-!LICENSE
-!README.md
+!assets/
+!assets/**
 
 !src/
 !src/**
+
+!.gitignore
+!launcher.py
+!LICENSE
+!README.md

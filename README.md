@@ -1,189 +1,257 @@
-# lcmp - List Comparison Tool
+<h1>
+  <img src="assets/logo.svg" alt="lcmp logo" height="80" style="vertical-align: middle; margin-right: 8px;">
+  LCMP
+</h1>
+
+#### Instagram followers / following list comparison tool
+
+`lcmp` is a program designed to compare **Instagram followers / following** lists between one or two data exports
+
+You can see:
+
+- Who you follow but doesn't follow you back
+- Who follows you but you don't follow back
+- Mutual followers
+- Who started / stopped following between two dates
+- Overlap and differences between two different accounts
+
+All of this is done with a simple **drag & drop** interface  
+Additionally, when you click on a username in the results list, `lcmp` opens your **default browser** with that user's Instagram profile
 
 ## Table of Contents
 
-1. [Description](#description)
-2. [Features](#features)
+1. [What lcmp Does](#what-lcmp-does)
+2. [Privacy and Data Safety](#privacy-and-data-safety)
 3. [Requirements](#requirements)
-4. [Installation](#installation)
-5. [Usage](#usage)
-6. [License](#license)
-8. [For Beginners](#for-beginners)
-9. [Examples](#examples)
+4. [Quick Start](#quick-start)
+5. [Using the App](#using-the-app)  
+    - [0. Download your Instagram's information](#0-download-your-instagrams-information)
+    - [1. Drag & drop Instagram folders](#1-drag--drop-instagram-folders)  
+    - [2.a Select one folder](#2a-select-one-folder)  
+    - [2.b Select two folders](#2b-select-two-folders)  
+    - [3. Switch method](#3-switch-method)  
+    - [4. Switch followers / following](#4-switch-followers--following)  
+    - [5. Open profile in browser](#5-open-profile-in-browser)
+6. [Expected Instagram Export Format](#expected-instagram-export-format)
+7. [License](#license)
 
-## Description
+## What lcmp Does
 
-**lcmp** is a lightweight tool designed to compare two lists and determine their differences. It allows you to find elements that are common to both lists, those that appear only in the first, and those that appear only in the second. This makes it useful for various applications, such as dataset analysis, user list management, or general list comparisons
+`lcmp` reads the **HTML export** from Instagram's "Download Your Information" feature and compares the user lists it finds there
 
-Additionally, **lcmp** includes support for processing Instagram data, allowing users to analyze their followers and following lists. It can extract relevant data from downloaded Instagram files or directly from HTML\<div> elements
+You use it to:
 
-## Features
+- Compare **followers vs following** for a single account  
+- Compare **two exports of the same account** (different dates) to see:
+  - who started following you
+  - who stopped following you
+  - who kept following you
+- Compare **two different accounts** to see:
+  - who follows A but not B
+  - who follows B but not A
+  - who follows both
 
-- Compare two lists and identify elements that:
-  - Appear in both lists
-  - Exist in the first list but not in the second
-  - Exist in the second list but not in the first
-- Process raw text files with one item per line
-- Handle Instagram follower/following lists from downloaded data
-- Extract user lists from `<div>` elements copied from Instagram’s web interface
-- Display results in a structured format for easy analysis
+Everything is shown as a simple numbered list of usernames
+
+## Privacy and Data Safety
+
+`lcmp` works **100% offline**  
+Absolutely nothing is uploaded, sent, or shared anywhere. Your Instagram export stays on **your machine**, is read locally, shown on screen, and that's the end of the story
+
+I know this because **I wrote the program**, and there is literally no code inside it capable of sending anything to anyone, not even by accident  
+It couldn't leak your data even if it tried (and it doesn't try)
+
+That said:
+
+>  As with anything on the internet, **never trust blindly**  
+>  Don't take my word for it, or anyone's  
+>  If you care about your privacy, always inspect the tools you use, check the source code, and make sure it does what it claims
+
+So `lcmp` is safe, private, and offline  
+As I said, **I know it is** but checking things by yourself is always a good idea
 
 ## Requirements
 
-- A **C compiler** (such as GCC, Clang, etc.). *(Tested with ****GCC 13.2.0****. Older versions may not work properly.)*
-- `stb_ds.h` (already included in the project, no need to install separately)
+- **Python 3**
 
-This project uses [`stb_ds.h`](https://github.com/nothings/stb) by Sean Barrett, a public domain / MIT-licensed single-header library for dynamic arrays and hash maps in C
+You don't need to install anything else manually  
+When you run `launcher.py` for the first time, it will:
 
-## Installation
+- create a local virtual environment (`.venv`)
+- install the only required package (`pygame`) inside it  
 
-To install and compile **lcmp**, follow these steps:
+All of this happens automatically and only once
 
-```sh
-git clone https://github.com/mblucasm/lcmp.git
-cd lcmp
-gcc -O2 -o lcmp src/main.c src/arg.c src/buf.c src/method.c src/error.c src/slice.c
+## Quick Start
+
+1. [Download and Install Python 3](https://www.python.org/downloads/)
+2. Download this project (Git or ZIP and extract it)
+3. Run `launcher.py` (only `launcher.py` , `lcmp.py` is **NOT** supposed to be run directly)
+
+For example, from a terminal:
+
+```
+python launcher.py
 ```
 
-If you're new to programming or using a terminal, **don't worry!** I have a dedicated section: [For Beginners](#for-beginners). There, you'll find a detailed step-by-step guide explaining everything, from downloading the project to running it, in a way that's easy to follow—even if you've never used a terminal before
+(Or use whatever double-click / launcher setup you prefer on your system)
 
-## Usage
+## Using the App
 
-To compare two lists, run:
+### 0. Download your Instagram's information
+On Instagram, go to:
 
-```sh
-./lcmp list1 list2
+> **Settings → Accounts Center → Your information and permissions → Export your information → Create export → Export to device**
+
+Then:
+1. Select **Customize information**  
+2. Clear **ALL** checkboxes from **ALL** sections  
+3. Only check the **Followers and Following** box inside the **Connections** section  
+
+`lcmp` will still work if you keep other boxes checked, but it will ignore that extra data. Leaving them enabled just:
+
+- wastes disk space  
+- makes the export larger and slower to download  
+
+Now make sure:
+
+- **Date range** is set to **All time**  
+- **Format** is set to **HTML** (default)  
+- **Media quality** is set to **Lower quality**  
+  - `lcmp` doesn't use any media, so a higher quality only means more disk space and slower export for no benefit
+
+Once the export is ready, download it, unzip it, and you're ready to drag the folders into `lcmp`
+
+### 1. Drag & drop Instagram folders
+
+At first you'll see a **"Drag & Drop"** message  
+Drag your Instagram export folder (the extracted folder, not the ZIP) into the window
+
+The folder name **must follow this pattern** (this is the pattern folders will naturally follow):
+
+- `instagram-USERNAME-YYYY-MM-DD-UUID`
+
+If valid, it appears on the left list as:
+
+- `USERNAME YYYY-MM-DD`
+
+You may drop multiple folders
+
+### 2.a Select one folder
+
+Click one of the folders that appeared within the `lcmp` window
+
+This shows comparisons between **followers** and **following** within that export:
+
+- People you follow but don't follow you back  
+- People who follow you but you don't follow them  
+- Mutual follows  
+
+You'll also see the total count  
+You can use the mouse wheel to scroll both the folder list and the users list
+
+### 2.b Select two folders
+
+Select two entries (max 2)
+
+**If both belong to the same user (different dates):**
+
+- See who started following  
+- Who stopped following  
+- Who kept following  
+
+**If they belong to different users:**
+
+- People who follow A but not B  
+- People who follow B but not A  
+- People who follow both  
+
+The top of the results panel always explains what you're currently viewing in plain language
+
+### 3. Switch method
+
+A red button lets you switch between the three comparison methods:
+
+- **XA**
+- **AX**
+- **AA**
+
+The selected method is always visible in the **"Method used"** box and reflected in the explanatory text above the results list
+
+### 4. Switch followers / following
+
+When two folders are selected, a blue button appears:
+
+- **"Click to compare following instead"**  
+  or  
+- **"Click to compare followers instead"**
+
+Clicking this button toggles the mode between **followers** and **following** comparisons  
+The current mode ("Followers" or "Following") is shown in the **"Comparing"** box
+
+### 5. Open profile in browser
+
+When results are shown (the list of usernames in the main panel), you can:
+
+- **Click any username** in the results list  
+- `lcmp` will open your **default web browser** at:
+
+  - `https://www.instagram.com/USERNAME/`
+
+This makes it easy to quickly inspect specific accounts directly on Instagram
+
+## Expected Instagram Export Format
+
+Inside each folder, `lcmp` expects this structure:
+
+```
+connections/
+  followers_and_following/
+    followers_1.html
+    following.html
 ```
 
-Where `list1` and `list2` contain the lists you want to compare. The program will output the differences between the two lists
+These HTML files contain links like:
 
-### Instagram Data Processing
-
-If you want to analyze your Instagram followers and following, you can specify the **Instagram data folder** directly:
-
-```sh
-./lcmp --instagram-folder=<path/to/folder>
+```html
+<a href="https://www.instagram.com/USERNAME/">
 ```
 
-Alternatively, if you have copied the `<div>` elements containing followers or following from the web interface, you can use those as input files
+`lcmp` extracts the USERNAME from those links and uses them in the comparisons
 
-To get more details about the program's usage, run:
-```sh
-./lcmp --help
+### ⚠️ Important note about Instagram export accuracy
+
+For some reason, the data you download from Instagram is often inaccurate, and users may appear in the lists even though they shouldn't  
+
+Always double-check `lcmp`'s output: if you see accounts that don't make sense, this is caused by Instagram's export errors, not by the program itself
+
+### ⚠️ Important note about big accounts and multiple followers_*.html files
+
+While writing this README I discovered that, for **large Instagram accounts**, the followers export may include **multiple files**:
+
 ```
+followers_1.html
+followers_2.html
+followers_3.html
+```
+
+**lcmp currently uses only `followers_1.html`**, because I didn't know Instagram split the data this way until now and the program is already finished
+
+I have **no intention of changing this behavior for now**, although it might be improved in the future
+
+If your account has many followers, be aware that results will not include users found in `followers_2.html`, `followers_3.html`, etc
+
+If the folder name is invalid, an error message appears in the terminal, and the folder is not added to the list  
+If the folder structure is invalid, `lcmp` will safely crash when trying to open the required files
 
 ## License
 
 Copyright © 2025 Lucas Martín  
 Distributed under the MIT License. See the [LICENSE](./LICENSE) file for full details
 
-## For Beginners
+--- 
 
-If you've never used a terminal or compiled a program before, this section will guide you step by step
+Finally, I'd like to give ChatGPT credit for writing 99% of this README  
 
-### 1. **Opening the Terminal**
-
-To run commands, you'll need to open the terminal:
-
-- **Windows:** Open **PowerShell** or **CMD (Command Prompt)**
-- **Mac:** Open **Terminal** from your applications or search bar
-
-### 2. **Downloading the Project**
-
-There are two ways to get lcmp:
-
-- **Option 1: Using Git** (Recommended if you have Git installed)
-
-  ```sh
-  git clone https://github.com/mblucasm/lcmp.git
-  ```
-
-  This will create a folder named `lcmp` in your current directory
-
-- **Option 2: Downloading as a ZIP file**
-
-  - Visit the [GitHub repository](https://github.com/mblucasm/lcmp)
-  - Click the green **"Code"** button and select **Download ZIP**
-  - Extract the ZIP file into a folder
-
-### 3. **Checking if You Already Have a Compiler Installed**
-
-To check if you already have a compiler installed, open the terminal and type:
-
-```sh
-<compiler> --version
-```
-
-Replace `<compiler>` with `gcc`, `clang`, or another compiler name. If a version number appears, you already have a compiler installed. If not, follow the next step to install one
-
-### 4. **Installing a Compiler**
-
-A C compiler is required to compile the program. If you don't have one, follow these steps:
-
-- **Windows:**
-
-  - I personally recommend w64devkit because it's very easy to install and works out of the box
-  - Download **w64devkit** from [this link](https://github.com/skeeto/w64devkit) → **Go to Releases** and download the `.exe` that suits your device (**x64** for 64-bit systems, **x86** for 32-bit systems)
-  - Run the `.exe` file to extract w64devkit
-  - w64devkit provides **gcc** and **cc** as compilers
-  - To ensure the compiler is available in the terminal, [**add it to your system's PATH**](#41-adding-the-compiler-to-your-systems-path)
-
-- **Mac:**
-
-  - If `clang --version` didn't show a version, install Clang by running:
-    ```sh
-    xcode-select --install
-    ```
-
-#### 4.1 **Adding the Compiler to Your System's PATH**
-The **PATH** is an environment variable that tells your operating system where to look for executable files. If a program is in a directory listed in the PATH, you can run it from any terminal window without specifying the full path
-
-To add a program (e.g., `gcc` from w64devkit) to your PATH:
-
-- **Windows:**
-  1. Open **System Properties** (Win + R, type `sysdm.cpl`, press Enter)
-  2. Go to the **Advanced** tab and click **Environment Variables**
-  3. Under **System Variables**, find `Path` and click **Edit**
-  4. Click **New** and add the path to the w64devkit `bin` folder
-  5. Click **OK** and restart the terminal
-
-### 5. **Navigating to the Project Folder**
-
-Once you have the project downloaded and the compiler installed:
-
-1. Open the terminal
-2. Use the `cd` command to move into the project directory:
-   ```sh
-   cd <path/to/lcmp>
-   ```
-   
-The `cd` command stands for "change directory". It is used to navigate to different folders in your file system. When you open the terminal, you start in your home directory. To go to another folder, you type `cd` followed by the path to the folder you want to go to
-
-For example, if your project is in a folder named "lcmp" on your desktop, you would type `cd Desktop/lcmp`
-
-### 6. **Compiling and Running the Program**
-
-Now, compile the code into an executable program
-
-For **GCC**:
-
-```sh
-gcc -O2 -o lcmp src/main.c src/arg.c src/buf.c src/method.c src/error.c src/slice.c
-```
-
-For **Clang (or other compilers)**, replace `gcc` with the name of your compiler:
-
-```sh
-<compiler> -O2 -o lcmp src/main.c src/arg.c src/buf.c src/method.c src/error.c src/slice.c
-```
-
-This will generate an executable file called `lcmp`, to see how to use it, read [Usage](#usage)
-
-> That's it! You've successfully downloaded, compiled, and run the project. If you encounter any issues, there are many online tutorials and videos that explain how to set up and use compilers and terminals, so don't hesitate to check them out for more help
-
-And that’s everything — enjoy using lcmp
-
-Thanks for reading my beautifully written README  
-(ChatGPT may or may not have had a hand in that)
-
+That's everything  
 Lucas M.

@@ -1,0 +1,12 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Círculo centrado -->
+    <circle cx="90" cy="90" r="50" fill="none" stroke="#444" stroke-width="6"/>
+
+    <!-- Parte superior (desplazada +20 en Y) -->
+    <polygon points="90,50 100,65 95,65 95,105 85,105 85,65 80,65" fill="#4A90E2"/>
+
+    <!-- Parte inferior (desplazada +20 en Y) -->
+    <polygon points="90,130 100,115 95,115 95,75 85,75 85,115 80,115" fill="#E24A75"/>
+
+</svg>
