@@ -216,8 +216,8 @@ class Method(IntEnum):
             if state.method == Method.AA:
                 return "People you follow and follow you back"
 
-        user1 = state.folders[state.selected_folders[0]].user
-        user2 = state.folders[state.selected_folders[1]].user
+        user1 = state.folders[min(state.selected_folders)].user
+        user2 = state.folders[max(state.selected_folders)].user
 
         if state.comparing_followers:
             if user1 == user2:
