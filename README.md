@@ -107,7 +107,7 @@ That said:
 
 *I know it does, since I wrote the program myself, but verifying things yourself is always a good idea*
 
-### Important note about Instagram export accuracy
+## Important note about Instagram export accuracy
 
 For some reason, the data downloaded from Instagram is often inaccurate, and users may appear in lists even though they shouldn’t
 
