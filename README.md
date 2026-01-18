@@ -20,17 +20,23 @@ Clicking on a username in the results list opens that user’s Instagram profile
 
 ## Table of Contents
 
-```
-...
-```
+- [Using the App](#using-the-app)
+    - [1. Download the program](#1-download-the-program)
+    - [2. Download your Instagram information](#2-download-your-instagram-information)
+    - [3. Drag & drop Instagram folders](#3-drag--drop-instagram-folders)
+    - [4. Select one folder or two folders](#4-select-one-folder-or-two-folders)
+    - [5. Open profiles in your browser](#5-open-profiles-in-your-browser)
+- [Privacy and Data Safety](#privacy-and-data-safety)
+- [Important note about Instagram export accuracy](#important-note-about-instagram-export-accuracy)
+- [License](#license)
 
 ## Using the App
 
 ### 1. Download the program
 
-To download the program, go to [Releases]() and download the `.zip` file for your device. As of right now:
+To download the program, go to [Releases](https://github.com/mblucasm/lcmp/releases) and download the `.zip` file for your device. As of right now:
 
-* [lcmp_v1.0.0_Windows_x64.zip]()
+* lcmp_v1.0.0_Windows_x64.zip
 
 ### 2. Download your Instagram information
 
@@ -101,7 +107,7 @@ That said:
 
 *I know it does, since I wrote the program myself, but verifying things yourself is always a good idea*
 
-### ⚠️ Important note about Instagram export accuracy
+### Important note about Instagram export accuracy
 
 For some reason, the data downloaded from Instagram is often inaccurate, and users may appear in lists even though they shouldn’t
 
