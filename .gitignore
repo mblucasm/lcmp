@@ -3,10 +3,14 @@
 !assets/
 !assets/**
 
-!src/
-!src/**
+!modules/
+!modules/**
+
+!roboto/
+!roboto/**
 
 !.gitignore
-!launcher.py
 !LICENSE
+!main.py
 !README.md
+!requirements.txt
