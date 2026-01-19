@@ -6,7 +6,7 @@ from enum import IntEnum
 from modules.ig import InstagramDir, Target
 from modules.gui import Scene, TextBox, TextPos, Rect
 
-class Unreachable(BaseException):
+class Unreachable(RuntimeError):
     ...
 
 class ErrorType(IntEnum):

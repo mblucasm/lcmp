@@ -6,10 +6,10 @@ from pathlib import Path
 from enum import IntEnum
 from html.parser import HTMLParser
 
-class Unreachable(BaseException):
+class Unreachable(RuntimeError):
     ...
 
-class InvalidInstagramDir(BaseException):
+class InvalidInstagramDir(Exception):
     ...
 
 class Target(IntEnum):
