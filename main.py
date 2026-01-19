@@ -183,7 +183,7 @@ def state_update_users() -> None:
     except FileNotFoundError as e:
         # TODO: Maybe don't delete users selections, refigure them out
         state.selected = (None, None)
-        state_update_users()
+        state.users.clear()
         create_new_error(ErrorType.ERROR, f"Couldn't find {e.filename}. You probably renamed, moved or deleted some files. Restart lcmp and reload the folders if you want to select this one")
         return
 
@@ -235,7 +235,7 @@ def mainscene_click_user(i: int, button: Button) -> None:
     if username != "":
         webbrowser.open(state.users[username])
 
-# TODO: Refactor this shit
+# TODO: Refactor this
 def get_phrase() -> str:
     global state
     assert len(Method) == 3 and len(Target) == 2
