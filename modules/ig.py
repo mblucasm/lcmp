@@ -81,10 +81,10 @@ class InstagramDir:
         if len(year) != 4 or not year.isnumeric():
             raise InvalidInstagramDir(f"Invalid year found in folder's name\n'{stem}'")
 
-        if len(month) != 2 or not year.isnumeric():
+        if len(month) != 2 or not month.isnumeric():
             raise InvalidInstagramDir(f"Invalid month found in folder's name\n'{stem}'")
 
-        if len(day) != 2 or not year.isnumeric():
+        if len(day) != 2 or not day.isnumeric():
             raise InvalidInstagramDir(f"Invalid day found in folder's name\n'{stem}'")
 
         if len(uuid) == 0:
