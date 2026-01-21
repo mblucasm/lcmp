@@ -54,10 +54,10 @@ def should_add_uuid(i: int, dirs: list[InstagramDir]) -> bool:
         return False if len(dirs) == 1 else (dirs[0].date == dirs[1].date and dirs[0].username == dirs[1].username)
 
     if i == len(dirs) - 1:
-        return (dirs[i].date == dirs[i-1].date and dirs[i].date == dirs[i-1].date)
+        return (dirs[i].date == dirs[i-1].date and dirs[i].username == dirs[i-1].username)
     
-    return (dirs[i].date == dirs[i-1].date and dirs[i].date == dirs[i-1].date) or \
-           (dirs[i].date == dirs[i+1].date and dirs[i].date == dirs[i+1].date)
+    return (dirs[i].date == dirs[i-1].date and dirs[i].username == dirs[i-1].username) or \
+           (dirs[i].date == dirs[i+1].date and dirs[i].username == dirs[i+1].username)
 
 def get_uuid_if_needed(i: int, dirs: list[InstagramDir]) -> str:
     return "" if not should_add_uuid(i, dirs) else f"({dirs[i].uuid})"
