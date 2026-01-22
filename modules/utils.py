@@ -24,7 +24,7 @@ class Method(IntEnum):
         return Method((self + 1) % len(Method))
 
 class State:
-    
+
     scenes: dict[str, Scene] = {}
     scenename: str = ""
 
@@ -49,13 +49,13 @@ class State:
     )
 
 def should_add_uuid(i: int, dirs: list[InstagramDir]) -> bool:
-    
+
     if i == 0:
         return False if len(dirs) == 1 else (dirs[0].date == dirs[1].date and dirs[0].username == dirs[1].username)
 
     if i == len(dirs) - 1:
         return (dirs[i].date == dirs[i-1].date and dirs[i].username == dirs[i-1].username)
-    
+
     return (dirs[i].date == dirs[i-1].date and dirs[i].username == dirs[i-1].username) or \
            (dirs[i].date == dirs[i+1].date and dirs[i].username == dirs[i+1].username)
 

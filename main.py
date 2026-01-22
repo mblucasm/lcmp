@@ -10,6 +10,7 @@ import webbrowser
 import modules.ig as ig
 import modules.rgb as rgb
 
+from urllib.parse import urlparse
 from modules.gui import Scene, TextBox, Button, Rect, TextPos
 from modules.ig import InstagramDir, Target, InvalidInstagramDir
 from modules.utils import Unreachable, State, ErrorType, Method, get_uuid_if_needed
@@ -113,9 +114,37 @@ def create_new_error(etype: ErrorType, msg: str) -> None:
         state.error.rectcolor = rgb.RED
     else:
         raise Unreachable
-    
+
     state.error.text = msg
     state.errortimer = ERRORLIFETIME
+
+def issafeurl(url: str) -> bool:
+
+    try:
+        parsed = urlparse(url.strip())
+    except Exception:
+        create_new_error(ErrorType.ERROR, f"{url} is not valid")
+        return False
+
+    if parsed.scheme.lower() != "https":
+        create_new_error(ErrorType.ERROR, f"{url} is not safe. Protocol needs to be https")
+        return False
+
+    host = parsed.hostname
+    if host is None:
+        create_new_error(ErrorType.ERROR, f"{url} is not safe. Instagram is not the host")
+        return False
+
+    host = host.lower()
+    if host != "instagram.com" and not host.endswith(".instagram.com"):
+        create_new_error(ErrorType.ERROR, f"{url} is not safe. Instagram is not the host")
+        return False
+
+    if not parsed.path or parsed.path == "/":
+        create_new_error(ErrorType.ERROR, f"{url} is not valid. Doesn't point to anything")
+        return False
+
+    return True
 
 def mainscene_update_visuals() -> None:
 
@@ -128,7 +157,7 @@ def mainscene_update_visuals() -> None:
     assert state.scenes[state.scenename].textboxes.get("phrases") is not None
     assert state.scenes[state.scenename].textboxes.get("n-selections") is not None
     assert state.scenes[state.scenename].textboxes.get("n-users-displayed") is not None
-    
+
     nos = int(state.selected[0] is not None) + int(state.selected[1] is not None)
 
     if state.selected[0] is None:
@@ -146,7 +175,7 @@ def mainscene_update_visuals() -> None:
     state.scenes[state.scenename].textboxes["phrases"].text = get_phrase()
 
 def mainscene_switch_method(_) -> None:
-    
+
     global state
     assert state.scenename == "main"
 
@@ -172,7 +201,7 @@ def state_update_users() -> None:
     if state.selected[0] is None:
         state.users.clear()
         return
-    
+
     as_target = Target.FOLLOWERS if (state.selected[1] is None) or (state.target == Target.FOLLOWERS) else Target.FOLLOWING
     bs_target = Target.FOLLOWING if (state.selected[1] is None) or (state.target == Target.FOLLOWING) else Target.FOLLOWERS
 
@@ -232,8 +261,9 @@ def mainscene_click_user(i: int, button: Button) -> None:
     assert state.scenes[state.scenename].buttons.get("user-list") is not None
 
     username = state.scenes[state.scenename].buttons["user-list"].text.split("\n")[button.start + i]
-    if username != "":
-        webbrowser.open(state.users[username])
+    if username != "" and (url := state.users[username]):
+        if issafeurl(url):
+            webbrowser.open(state.users[username])
 
 # TODO: Refactor this
 def get_phrase() -> str:
@@ -392,7 +422,7 @@ def main() -> None:
 
     try:
         pygame.display.set_icon(pygame.image.load(LOGO_PATH))
-    except:
+    except Exception:
         ...
 
     running = True
@@ -458,10 +488,10 @@ def main() -> None:
         if state.errortimer > 0:
             state.error.draw(window)
             state.errortimer -= 1
-        
+
         pygame.display.flip()
         clock.tick(FPS)
-        
+
     pygame.quit()
 
 if __name__ == "__main__":

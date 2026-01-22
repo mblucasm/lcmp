@@ -21,11 +21,11 @@ class RobotoMono(pygame.freetype.Font):
     @staticmethod
     def advance(size: float) -> int:
         return round(3/5 * size)
-    
+
     @staticmethod
     def get_chars_per_line(rect_width: float, size: float) -> int:
         return round(rect_width / RobotoMono.advance(size))
-    
+
     @staticmethod
     def split(text: str, size: float, rect_width: float, start: int = 0) -> LinesType:
 
@@ -54,7 +54,7 @@ class RobotoMono(pygame.freetype.Font):
                     lines.append(word)
 
             end_idx = len(lines) - 1
-            data_result.append((start_idx, end_idx))            
+            data_result.append((start_idx, end_idx))
 
         return lines, data_result
 
@@ -91,10 +91,10 @@ class Rect:
 
     def totuple(self) -> tuple[float, float, float, float]:
         return self.x, self.y, self.w, self.h
-    
+
     def copy(self) -> Rect:
         return Rect(self.x, self.y, self.w, self.h)
-    
+
 class TextBox:
 
     TEXT_RECT_DEFLATION_FACTOR = 0.05
@@ -149,7 +149,7 @@ class TextBox:
         sw, sh = screen.get_size()
         if sw != self._sw or sh != self._sh:
             self._sw = sw
-            self._sh = sh 
+            self._sh = sh
             self.reset_cached()
 
     @property
@@ -208,17 +208,17 @@ class TextBox:
 
         if not self.rect.scaled(self._sw, self._sh).collides_with(mouseX, mouseY):
             return
-                
+
         total_parrs = self.start + len(parrs)
 
         if self.start + delta_start < 0:
             self.start = 0
             return
-                
+
         if self.start + delta_start >= total_parrs:
             self.start = total_parrs - 1
             return
-        
+
         self.start += delta_start
 
     def get_lines(self, screen: pygame.Surface) -> LinesType:
@@ -319,7 +319,7 @@ class TextBox:
                     self._cached["line-rects"][i].w = len(line) * advance
 
             elif self.textpos == TextPos.CENTERED:
-                for i, line in enumerate(lines):            
+                for i, line in enumerate(lines):
                     self._cached["line-rects"].append(base_rect.copy())
                     width = len(line) * advance
                     self._cached["line-rects"][i].x += (self._cached["line-rects"][i].w - width) / 2
@@ -343,13 +343,13 @@ class TextBox:
             base_frame = self.rect.scaled(self._sw, self._sh).deflated(self.TEXT_RECT_DEFLATION_FACTOR, self.TEXT_RECT_DEFLATION_FACTOR)
 
             if self.textpos == TextPos.NORTHWEST:
-                for i in range(nlines):            
+                for i in range(nlines):
                     self._cached["line-frames"].append(base_frame.copy())
                     self._cached["line-frames"][i].y += i * self.size
                     self._cached["line-frames"][i].h = self.size
 
             elif self.textpos == TextPos.CENTERED:
-                for i in range(nlines):            
+                for i in range(nlines):
                     self._cached["line-frames"].append(base_frame.copy())
                     self._cached["line-frames"][i].y += self._cached["line-frames"][i].h / 2 - nlines * self.size / 2 + i * self.size
                     self._cached["line-frames"][i].h = self.size
@@ -386,7 +386,7 @@ class TextBox:
         if self.rectcolor is not None:
             rect = self.rect.scaled(self._sw, self._sh)
             pygame.draw.rect(screen, self.rectcolor, rect.totuple())
-            
+
         if self.scrollbarcolor is not None:
             bar, mark = self.get_scrollbar(screen)
             pygame.draw.rect(screen, self.scrollbarcolor, bar.totuple())
@@ -413,7 +413,7 @@ class Button(TextBox):
             callback: Callable[[Any], Any] | None = None,
             parrcallback: Callable[[int, Any], Any] | None = None
         ) -> None:
-            
+
             super().__init__(
                 rect = rect,
                 text = text,
@@ -439,7 +439,7 @@ class Button(TextBox):
             return True, self.callback(args)
 
         return False, None
-    
+
     def click_parr(self, mouseX: int, mouseY: int, screen: pygame.Surface, args: Any) -> tuple[bool, Any]:
 
         if not self.isvisible:
@@ -454,7 +454,7 @@ class Button(TextBox):
                 return True, self.parrcallback(i, args)
 
         return False, None
-    
+
 @dataclass
 class Scene:
 
