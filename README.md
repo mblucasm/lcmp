@@ -36,7 +36,7 @@ Clicking on a username in the results list opens that user’s Instagram profile
 
 To download the program go to [Releases](https://github.com/mblucasm/lcmp/releases), download and extract the `.zip` file for your device. As of right now:
 
-* lcmp_v1.0.3_Windows_x64.zip
+* lcmp_v1.0.4_Windows_x64.zip
 
 *All releases built using PyInstaller 6.18.0*
 
